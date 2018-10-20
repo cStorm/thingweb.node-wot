@@ -170,13 +170,6 @@ export default class Servient {
 
     public expose(thing: ExposedThing): Promise<void> {
 
-        if (this.servers.length === 0) {
-            console.warn(`Servient has no servers to expose Things`);
-            return new Promise<void>((resolve) => { resolve(); });
-        }
-
-        console.log(`Servient exposing '${thing.name}'`);
-
         // initiatlizing forms fields
         for (let name in thing.properties) {
             thing.properties[name].forms = [];
@@ -187,6 +180,13 @@ export default class Servient {
         for (let name in thing.events) {
             thing.events[name].forms = [];
         }
+
+        if (this.servers.length === 0) {
+            console.warn(`Servient has no servers to expose Things`);
+            return new Promise<void>((resolve) => { resolve(); });
+        }
+
+        console.log(`Servient exposing '${thing.name}'`);
 
         let serverPromises: Promise<void>[] = [];
         this.servers.forEach( (server) => { serverPromises.push(server.expose(thing)); });
